@@ -141,20 +141,11 @@ This is useful for reporting multicollinearity/redundancy before final model sel
   * SHAP for explainability
   * Leakage checks and temporal splits (if applicable)
 
----
 
-## License
-
-Choose a license (e.g., MIT) if you plan to make this public. If the code is research-only, you can leave it unlicensed or add a simple “All rights reserved”.
-
----
 
 ## Contact
 
 **Amirhossein Khajepour**
 Email: [amirhosseion.kh@gmail.com](mailto:a.khajepour.official@gmail.com)
 
-```
 
-If you want, I can also generate a **shorter “About/README” version** (very common for GitHub) + a **good `.gitignore`** for notebooks/models/results.
-```
