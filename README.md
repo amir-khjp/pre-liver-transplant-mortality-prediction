@@ -1,4 +1,3 @@
-```markdown
 # Pre–Liver Transplant Mortality Prediction (10-Fold CV | Classical ML & Ensembles)
 
 This repository contains an end-to-end machine learning workflow for **predicting patient mortality before liver transplantation** using a clinical dataset. The pipeline focuses on:
@@ -17,62 +16,6 @@ This repository contains an end-to-end machine learning workflow for **predictin
 ---
 
 ## Repository Structure (suggested)
-```
-
-.
-├── cleaned_dataset.csv                          # input dataset (NOT recommended to upload if private)
-├── notebooks/
-│   ├── 01_smote_balancing.ipynb
-│   ├── 02_cv_model_benchmark.ipynb
-│   ├── 03_feature_importance.ipynb
-│   ├── 04_numeric_correlation.ipynb
-│   ├── 05_categorical_cramersv.ipynb
-│   └── 06_redundancy_report.ipynb
-├── outputs/
-│   ├── section6_numeric_pairs_top30.csv
-│   ├── section6_categorical_pairs_top.csv
-│   ├── section6_redundancy_summary.csv
-│   ├── feature_importance_rf_aggregated.csv
-│   ├── feature_importance_xgb_gain_aggregated.csv
-│   ├── rf_top_features_aggregated.png
-│   ├── rf_cumulative_importance_aggregated.png
-│   ├── corr_matrix_top30_numeric_annotated.png
-│   └── cramersV_top30_categorical_annotated.png
-└── README.md
-
-````
-
-You can keep everything in one notebook if you prefer, but splitting into sections makes the repo easier to understand.
-
----
-
-## Dataset
-Expected file: `cleaned_dataset.csv`
-
-- Target column: **`Expire`**
-  - `0` = Alive / Non-expired
-  - `1` = Expired
-- The code automatically:
-  - drops rows with missing `Expire`
-  - casts `Expire` to `int`
-  - separates numeric and categorical columns
-  - imputes missing values
-  - scales numeric features
-  - one-hot encodes categorical features
-
-⚠️ **Privacy note:** if your dataset contains sensitive or identifiable clinical information, do **not** upload `cleaned_dataset.csv` to GitHub.
-
----
-
-## Requirements
-Install dependencies:
-
-```bash
-pip install -U pandas numpy scikit-learn imbalanced-learn matplotlib
-pip install -U xgboost   # optional (recommended for XGBoost section)
-````
-
----
 
 ## Section 1 — Balancing Data with SMOTE
 
@@ -209,7 +152,7 @@ Choose a license (e.g., MIT) if you plan to make this public. If the code is res
 ## Contact
 
 **Amirhossein Khajepour**
-Email: [a.khajepour.official@gmail.com](mailto:a.khajepour.official@gmail.com)
+Email: [amirhosseion.kh@gmail.com](mailto:a.khajepour.official@gmail.com)
 
 ```
 
