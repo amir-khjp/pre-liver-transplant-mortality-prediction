@@ -1,3 +1,4 @@
+```markdown
 # Pre–Liver Transplant Mortality Prediction (10-Fold CV | Classical ML & Ensembles)
 
 This repository contains an end-to-end machine learning workflow for **predicting patient mortality before liver transplantation** using a clinical dataset. The pipeline focuses on:
@@ -16,3 +17,201 @@ This repository contains an end-to-end machine learning workflow for **predictin
 ---
 
 ## Repository Structure (suggested)
+```
+
+.
+├── cleaned_dataset.csv                          # input dataset (NOT recommended to upload if private)
+├── notebooks/
+│   ├── 01_smote_balancing.ipynb
+│   ├── 02_cv_model_benchmark.ipynb
+│   ├── 03_feature_importance.ipynb
+│   ├── 04_numeric_correlation.ipynb
+│   ├── 05_categorical_cramersv.ipynb
+│   └── 06_redundancy_report.ipynb
+├── outputs/
+│   ├── section6_numeric_pairs_top30.csv
+│   ├── section6_categorical_pairs_top.csv
+│   ├── section6_redundancy_summary.csv
+│   ├── feature_importance_rf_aggregated.csv
+│   ├── feature_importance_xgb_gain_aggregated.csv
+│   ├── rf_top_features_aggregated.png
+│   ├── rf_cumulative_importance_aggregated.png
+│   ├── corr_matrix_top30_numeric_annotated.png
+│   └── cramersV_top30_categorical_annotated.png
+└── README.md
+
+````
+
+You can keep everything in one notebook if you prefer, but splitting into sections makes the repo easier to understand.
+
+---
+
+## Dataset
+Expected file: `cleaned_dataset.csv`
+
+- Target column: **`Expire`**
+  - `0` = Alive / Non-expired
+  - `1` = Expired
+- The code automatically:
+  - drops rows with missing `Expire`
+  - casts `Expire` to `int`
+  - separates numeric and categorical columns
+  - imputes missing values
+  - scales numeric features
+  - one-hot encodes categorical features
+
+⚠️ **Privacy note:** if your dataset contains sensitive or identifiable clinical information, do **not** upload `cleaned_dataset.csv` to GitHub.
+
+---
+
+## Requirements
+Install dependencies:
+
+```bash
+pip install -U pandas numpy scikit-learn imbalanced-learn matplotlib
+pip install -U xgboost   # optional (recommended for XGBoost section)
+````
+
+---
+
+## Section 1 — Balancing Data with SMOTE
+
+This step converts the original dataset into an encoded feature matrix and balances the classes:
+
+* Before SMOTE: `Expire=0: 633`, `Expire=1: 89`
+* After SMOTE:  `Expire=0: 633`, `Expire=1: 633`
+
+Output shapes (example):
+
+* Unbalanced: `(722, 154)` raw features
+* Balanced (encoded): `(1266, 340)` after preprocessing + SMOTE
+
+---
+
+## Section 2 — Model Benchmarking (10-Fold CV)
+
+Models evaluated using `StratifiedKFold(n_splits=10)` and the following metrics:
+
+* Accuracy
+* Precision
+* Recall
+* F1
+* PR-AUC (Average Precision)
+* ROC-AUC
+
+In addition to individual models, the repo builds:
+
+* **Voting-Top3**: Soft-vote of top 3 models by PR-AUC
+* **Voting-Top4**: Soft-vote of top 4 models by PR-AUC
+
+Example results (on balanced dataset):
+
+* **Voting-Top3 (RF+XGB+GB)**: PR-AUC ≈ 0.9905
+* **Voting-Top4 (RF+XGB+GB+MLP)**: PR-AUC ≈ 0.9948
+
+---
+
+## Section 3 — Feature Importance
+
+Two importance methods are included:
+
+### 3A) RandomForest importance (aggregated)
+
+* Trains RandomForest on balanced encoded data
+* Uses `preprocess.get_feature_names_out()`
+* Aggregates one-hot encoded features back to their **original column names**
+* Saves:
+
+  * `feature_importance_rf_aggregated.csv`
+  * `rf_top_features_aggregated.png`
+  * `rf_cumulative_importance_aggregated.png`
+
+### 3B) XGBoost gain importance (aggregated)
+
+* Extracts gain from booster features (`f0`, `f1`, ...)
+* Maps gain scores to encoded feature names, then aggregates to original feature names
+* Saves:
+
+  * `feature_importance_xgb_gain_aggregated.csv`
+
+---
+
+## Section 4 — Numeric Redundancy (Pearson Correlation)
+
+* Computes Pearson correlation on **Top-30 numeric** features
+* Produces an **annotated heatmap image**:
+
+  * `corr_matrix_top30_numeric_annotated.png`
+* Also exports the correlation matrix as a dataframe when needed.
+
+---
+
+## Section 5 — Categorical Redundancy (Cramér’s V)
+
+* Computes pairwise **Cramér’s V** (bias-corrected) among selected categorical features
+* Generates an **annotated heatmap image**:
+
+  * `cramersV_top30_categorical_annotated.png`
+
+---
+
+## Section 6 — Combined Redundancy Report
+
+Creates a compact redundancy summary for both:
+
+* Numeric pairs (Pearson r)
+* Categorical pairs (Cramér’s V)
+
+Exports:
+
+* `section6_numeric_pairs_top30.csv`
+* `section6_categorical_pairs_top.csv`
+* `section6_redundancy_summary.csv`
+
+This is useful for reporting multicollinearity/redundancy before final model selection.
+
+---
+
+## How to Run
+
+1. Place `cleaned_dataset.csv` next to your notebook(s).
+2. Run notebooks in order:
+
+* `01_smote_balancing.ipynb`
+* `02_cv_model_benchmark.ipynb`
+* `03_feature_importance.ipynb`
+* `04_numeric_correlation.ipynb`
+* `05_categorical_cramersv.ipynb`
+* `06_redundancy_report.ipynb`
+
+---
+
+## Notes / Limitations
+
+* SMOTE is applied **after preprocessing** (scaling + one-hot encoding), which is typical but should be reported clearly.
+* Performance on a **balanced (synthetic) dataset** may not reflect real-world deployment performance.
+* For clinical ML, consider further steps (future work):
+
+  * Nested CV for model selection
+  * Calibration (Platt/Isotonic)
+  * External validation cohort
+  * SHAP for explainability
+  * Leakage checks and temporal splits (if applicable)
+
+---
+
+## License
+
+Choose a license (e.g., MIT) if you plan to make this public. If the code is research-only, you can leave it unlicensed or add a simple “All rights reserved”.
+
+---
+
+## Contact
+
+**Amirhossein Khajepour**
+Email: [a.khajepour.official@gmail.com](mailto:a.khajepour.official@gmail.com)
+
+```
+
+If you want, I can also generate a **shorter “About/README” version** (very common for GitHub) + a **good `.gitignore`** for notebooks/models/results.
+```
