@@ -146,6 +146,6 @@ This is useful for reporting multicollinearity/redundancy before final model sel
 ## Contact
 
 **Amirhossein Khajepour**
-Email: [amirhosseion.kh@gmail.com](mailto:a.khajepour.official@gmail.com)
+Email: [a.khajepour.official@gmail.com](mailto:a.khajepour.official@gmail.com)
 
 
